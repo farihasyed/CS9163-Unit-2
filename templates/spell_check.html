@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spell Check</title>
+</head>
+    <body>
+        <h1>Spell Check</h1>
+        <p/>
+        Enter text to be spell checked.
+        <p/>
+        <form id="inputtext" action="/spell_check" method="POST">
+            <textarea id="inputtext" name='inputtext' rows="10" cols="50" method="POST"></textarea><p/>
+            <button id="inputtextbutton" type="submit">Submit</button>
+        </form>
+        {% if output %}
+            <h2>Results</h2>
+            <p/>
+            <id="text">Input: {{ input }} </id>
+            <p/>
+            <id="misspelled"> {{ output }}</id>
+        {% endif %}
+    </body>
+    
+    
+</html>
