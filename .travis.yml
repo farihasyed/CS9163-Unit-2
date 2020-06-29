@@ -4,4 +4,6 @@ install:
   - pip install flask
   - pip install tox-travis
 script:
+  - export FLASK_APP=spell_checker.py
+  - export PYTHONPATH=$PYTHONPATH:$(pwd) 
   - tox
