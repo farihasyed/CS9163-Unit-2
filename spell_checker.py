@@ -19,13 +19,12 @@ def login():
     if request.method == 'POST':
         username = request.values['uname']
         password = request.values['pword']
-        phone = request.values['phone']
+        phone = request.values['2fa']
         return verify_login(username, password, phone)
     return render_template("login.html")
 
 
 def verify_login(username, password, phone):
-    # made this code prettier
     failure = 'Incorrect username and/or password. Please try again.'
     if username in credentials:
         user = credentials[username]
@@ -36,7 +35,6 @@ def verify_login(username, password, phone):
             return render_template('login.html', success=success)
         elif password == '' and phone != '':
             failure = 'Two-factor authentication failure.'
-
     return render_template('login.html', failure=failure)
 
 
@@ -45,7 +43,7 @@ def register():
     if request.method == 'POST':
         username = request.values['uname']
         password = request.values['pword']
-        phone = request.values['phone']
+        phone = request.values['2fa']
         return register_with_user_info(username, password, phone)
     return render_template('register.html')
 
