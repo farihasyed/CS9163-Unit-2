@@ -25,7 +25,7 @@ def create_app():
 credentials = {}
 app = create_app()
 if __name__ == "__main__":
-    app.run(host="localhost", port=9090, debug=True)
+    app.run(host="localhost")
 
 
 @app.route('/')
@@ -152,10 +152,15 @@ def spell_check_user_input(input, file_path):
         process = Popen(["./a.out", file_path, "text/wordlist.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                         universal_newlines=True)
         output, errors = process.communicate()
-        flash("Input text: " + input, 'input')
-    if len(output) == 0:
-        output = 'Could not spell check invalid input.'
+        if len(output) == 0:
+            output = 'Could not spell check invalid input.'
+            input = ''
+        else:
+            input = 'Input text: ' + input
+    print(input)
+    print(output)
     flash(output, 'output')
+    flash(input, 'input')
     return redirect(url_for('spell_check'))
 
 

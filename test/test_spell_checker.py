@@ -187,12 +187,13 @@ def test_spell_check_post(client):
     #escaped input
     input = '<>!@#$%!@#$'
     response = spell_check(client, input)
-    input = escape(input.encode)
+    print(response.data)
     assert b'Spell Check' in response.data
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert b'Input text: &amp;lt;&amp;gt;!@#$%!@#$' in response.data
     assert b'The following 1 words were misspelled:' in response.data
+    assert b'amp;lt;&amp;amp;gt' in response.data
 
     #invalid input
     input = '<><><><>>'
@@ -205,6 +206,9 @@ def test_spell_check_post(client):
     #input too long
     input = "i'm trying to overflow the input buffer, which a hacker might do as part of a denial of service (DOS) attack, but i'm a step ahead of them"
     response = spell_check(client, input)
+    assert b'Spell Check' in response.data
+    assert b'Enter text to be spell checked.' in response.data
+    assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert b'Input too long. Please try again.' in response.data
 
 
