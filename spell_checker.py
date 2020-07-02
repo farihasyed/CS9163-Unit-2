@@ -157,8 +157,6 @@ def spell_check_user_input(input, file_path):
             input = ''
         else:
             input = 'Input text: ' + input
-    print(input)
-    print(output)
     flash(output, 'output')
     flash(input, 'input')
     return redirect(url_for('spell_check'))
