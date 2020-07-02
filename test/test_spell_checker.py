@@ -193,7 +193,6 @@ def test_spell_check_post(client):
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert b'Input text: &amp;lt;&amp;gt;!@#$%!@#$' in response.data
     assert b'The following 1 words were misspelled:' in response.data
-    assert b'amp;lt;&amp;amp;gt' in response.data
 
     #invalid input
     input = '<><><><>>'
