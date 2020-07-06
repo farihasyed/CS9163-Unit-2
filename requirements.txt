@@ -1,0 +1,6 @@
+pytest
+flask
+tox-travis
+bleach
+flask-wtf
+tox
