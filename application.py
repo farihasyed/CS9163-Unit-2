@@ -1,14 +1,8 @@
-from flask import Flask, render_template, request, url_for, redirect, session, flash, make_response
-
-from spell_check import clean, login_required, spell_check_user_input, headers, register_with_user_info, verify_login
-
-
-MAX_CREDENTIAL_LENGTH = 32
-PHONE_LENGTH = 10
-PHONE_VALUE = 999999999
-MAX_INPUT_LENGTH = 128
-service_referrer = {'spell_check': 'spell_check.html'}
-session_token = {}
+from flask import Flask, render_template, request, url_for, redirect, session, make_response
+from flask_wtf import CSRFProtect
+from forms import Registration, Login, SpellCheck
+from spell_check import login_required, spell_check_user_input, register_with_user_info, verify_login, cleanup
+from security import check_referrer, check_user, headers
 
 
 def create_app():
@@ -18,12 +12,14 @@ def create_app():
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE='Strict')
     app.config.from_mapping(SECRET_KEY='dev')
-    return app
+    csrf = CSRFProtect()
+    csrf.init_app(app)
+    return app, csrf
 
 
-app = create_app()
+app, csrf = create_app()
 if __name__ == "__main__":
-    app.run(host="localhost")
+    app.run(host='localhost')
 
 
 @app.route('/')
@@ -31,55 +27,52 @@ def start():
     return redirect(url_for("login"))
 
 
-def print_cookies():
-    print(request.cookies)
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username, password, phone = clean(request.values['uname'], request.values['pword'], request.values['2fa'])
-        print("post login cookies")
-        print_cookies()
-        return verify_login(username, password, phone)
-    response = make_response(render_template('login.html'))
-    response = headers(response)
-    print("get login cookies")
-    print_cookies()
-    return response
+    form = Login()
+    if check_referrer():
+        if form.validate_on_submit():
+            username, password, phone = form.username.data, form.password.data, form.phone.data
+            return verify_login(username, password, phone)
+        response = make_response(render_template('login.html', form=form))
+        response = headers(response)
+        return response
+    return "CSRF attack thwarted"
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        username, password, phone = clean(request.values['uname'], request.values['pword'], request.values['2fa'])
-        return register_with_user_info(username, password, phone)
-    response = make_response(render_template('register.html'))
-    response = headers(response)
-    return response
+    form = Registration()
+    if check_referrer():
+        if form.validate_on_submit():
+            username, password, phone = form.username.data, form.password.data, form.phone.data
+            return register_with_user_info(username, password, phone)
+        response = make_response(render_template('register.html', form=form))
+        response = headers(response)
+        return response
+    return "CSRF attack thwarted"
 
 
 @app.route('/spell_check', methods=['GET', 'POST'])
 @login_required
 def spell_check():
-    if request.method == 'POST':
-        file_path = "text/samples/file.txt"
-        print("post spell check cookies")
-        print_cookies()
-        return spell_check_user_input(request.form['inputtext'], file_path)
-    response = make_response(render_template('spell_check.html', user=session['user']['username']))
-    response = headers(response)
-    print("get spell check cookies")
-    print_cookies()
-    return response
+    form = SpellCheck()
+    if check_user():
+        if form.validate_on_submit():
+            file_path = "text/samples/file.txt"
+            return spell_check_user_input(form.input.data, file_path)
+        response = make_response(render_template('spell_check.html', user=session['user']['username'], form=form))
+        response = headers(response)
+        return response
+    return "CSRF attack thwarted"
 
 
-@app.route('/logout', methods=['POST'])
+@csrf.exempt
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    print("prelogout cookies")
-    print_cookies()
-    session.pop('user', None)
-    flash("You have been logged out.", 'failure')
-    print("postlogout cookies")
-    print_cookies()
-    return redirect(url_for('start'))
+    if request.method == 'POST':
+        response = make_response(render_template('logout.html'))
+        response = headers(response)
+        cleanup()
+        return response
+    return redirect(url_for('login'))
