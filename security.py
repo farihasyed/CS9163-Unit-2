@@ -23,7 +23,8 @@ def check_user():
     user = session['user']
     expected = session_token[user['username']]
     remote_address = request.remote_addr
-    return remote_address == expected['remote address'] == user['remote address'] and user['token'] == expected['token'] and check_referrer()
+    return remote_address == expected['remote address'] == user['remote address'] and user['token'] == expected['token'] \
+           and check_referrer() and check_origin()
 
 
 def check_referrer():
@@ -38,3 +39,9 @@ def check_referrer():
             if referrer.find(remote_address) != -1 and referrer.find(ref) != -1:
                 return True
     return False
+
+
+def check_origin():
+    user = session_token[session['user']['username']]
+    origin = request.origin
+    return origin is None or str(origin).find(user['remote address'])
