@@ -15,7 +15,7 @@ def headers(response):
     response.headers['Strict-Transport-Security'] = 'max-age=3600; includeSubDomains'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['X-XSS-Protection'] = '0'
     return response
 
 
