@@ -9,7 +9,7 @@
     <body>
         <h1>User Registration</h1>
         <p/>
-        <div class=flashes>
+        <div id=success>
         {% with success = get_flashed_messages(category_filter=["success"]) %}
             {% if success %}
                 {%- for msg in success %}
@@ -28,10 +28,32 @@
         </div>
         
         <form name="register" id="register" action="/register" method="POST">
-            Username: <INPUT SIZE=32 id="uname" name="uname" TYPE='text' required="required"/><p/>
-            Password: <INPUT SIZE=32 id="pword" name="pword" TYPE='password' required="required"/><p/>
-            Cell phone number (XXXXXXXXXX): <INPUT SIZE=32 id="2fa" name="2fa" TYPE='text'/><p/>
-            <button id="registerbutton" type="submit">Register</button>
+            {{ form.csrf_token }}
+            
+            {% if form.username.errors %}
+                Invalid username.
+                {% for error in form.username.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+            <div id="uname" name="uname">{{ form.username.label }} {{ form.username }}</div><p/>
+            
+            {% if form.password.errors %}
+                Invalid password.
+                {% for error in form.password.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+            <div id="pword" name="pword">{{ form.password.label }} {{ form.password }}</div><p/>
+            
+            {% if form.phone.errors %}
+                Invalid phone number.
+                {% for error in form.phone.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+            <div id="2fa" name="2fa">{{ form.phone.label }} {{ form.phone }}</div><p/>
+            <div id="register">{{ form.register }}</div><p/>
         </form>
         
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

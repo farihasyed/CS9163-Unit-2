@@ -11,28 +11,35 @@
         <p/>
         You are logged in as {{ user }}.
         <form name="logout" id="logout" action="/logout" method="POST">
-        <button id="logoutbutton" type="submit">Log Out</button>
+        <div id="logout" type="submit">{{ form.logout }}</div>
         </form>
         <p/>
         Enter text to be spell checked.
         <p/>
         <form id="inputtext" action="/spell_check" method="POST">
-            <textarea id="inputtext" name='inputtext' rows="10" cols="50" method="POST"></textarea><p/>
-            <button id="inputtextbutton" type="submit">Submit</button>
+            {{ form.csrf_token }}
+            
+            {% if form.input.errors %}
+                {% for error in form.input.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+            <div id="inputtext" name="inputtext"> {{ form.input(rows='10', cols='50') }} </div><p/>
+            <div id="submit"> {{ form.submit }} </div>
         </form>
         
         <div class=flashes>
         {% with input = get_flashed_messages(category_filter=["input"]) %}
             {% if input %}
                 {%- for msg in input %}
-                    <id="textout">{{ msg }}</id>
+                    <div id="textout">{{ msg }}</div>
                 {% endfor -%}
             {% endif %}
         {% endwith %}<p/>
         {% with output = get_flashed_messages(category_filter=["output"]) %}
             {% if output %}
                 {%- for msg in output %}
-                    <id="misspelled">{{ msg }}</id>
+                    <div id="misspelled">{{ msg }}</div>
                 {% endfor -%}
             {% endif %}
         {% endwith %}
