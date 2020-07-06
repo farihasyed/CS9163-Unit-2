@@ -60,7 +60,7 @@ def spell_check_user_input(input, file_path):
     file.write(clean(input))
     file.close()
     input = 'Input text: ' + input
-    process = Popen(["./a.out", file_path, "text/wordlist.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = Popen(["#!/bin/sh\n./a.out", file_path, "text/wordlist.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                     universal_newlines=True)
     output, errors = process.communicate()
     if len(output) == 0:
