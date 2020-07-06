@@ -1,4 +1,4 @@
-from flask import request, url_for, redirect, session, g, flash
+from flask import request, url_for, redirect, session, flash
 import subprocess
 from subprocess import Popen
 import functools
@@ -14,11 +14,11 @@ def verify_login(username, password, phone):
     if username in credentials:
         user = credentials[username]
         if user['password'] == password or user['phone'] == phone:
+            session.clear()
             success = 'Success! You have been logged in.'
             token = str(token_hex(32))
             session['user'] = {'username': str(username), 'remote address': request.remote_addr, 'token': token}
             session_token[str(username)] = {'username': str(username), 'remote address': request.remote_addr, 'token': token}
-            g.user = session['user']
             flash(success, 'success')
             return redirect(url_for('login'))
         elif phone is not None and phone != user['phone']:
@@ -60,7 +60,7 @@ def spell_check_user_input(input, file_path):
     file.write(clean(input))
     file.close()
     input = 'Input text: ' + input
-    process = Popen(["#!/bin/sh\n./a.out", file_path, "text/wordlist.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = Popen(["./a.out", file_path, "text/wordlist.txt"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                     universal_newlines=True)
     output, errors = process.communicate()
     if len(output) == 0:
