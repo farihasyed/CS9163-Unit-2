@@ -7,6 +7,7 @@ from secrets import token_hex
 from security import session_token
 
 credentials = {}
+TOKEN_BYTES = 32
 
 
 def verify_login(username, password, phone):
@@ -15,8 +16,9 @@ def verify_login(username, password, phone):
         user = credentials[username]
         if user['password'] == password or user['phone'] == phone:
             session.clear()
+            session_token.clear()
             success = 'Success! You have been logged in.'
-            token = str(token_hex(32))
+            token = str(token_hex(TOKEN_BYTES))
             session['user'] = {'username': str(username), 'remote address': request.remote_addr, 'token': token}
             session_token[str(username)] = {'username': str(username), 'remote address': request.remote_addr, 'token': token}
             flash(success, 'success')
