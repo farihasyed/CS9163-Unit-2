@@ -1,8 +1,7 @@
 import pytest
 from flask import Flask, escape
-import application
+import app
 
-app = Flask(__name__)
 usernames = ['farihasyed', 'nyu12345', 'uncchapelhill', 'dooksucks', 'unc!!', 'thisusernameislongerthan32characters', 'farihasyed2']
 passwords = ['music922', 'nyu12345', 'dooksucks', 'uncisawesome', 'dook<sucks>', '!@#$%&*', 'thispasswordislongerthan32characters']
 phones = ['9193089764', '1234567890', '2345678910', '9221231995', '123456789100', '123', '0123456789', 'abc123']
@@ -15,13 +14,13 @@ for i in range(correct_credentials):
 
 @pytest.fixture
 def client():
-    application.app.config['TESTING'] = True
-    application.app.config['WTF_CSRF_CHECK_DEFAULT'] = False
-    application.app.config['WTF_CSRF_ENABLED'] = False
-    with application.app.test_client() as client:
-        with application.app.app_context():
-            s = application.app
-            c = application.app.app_context()
+    app.app.config['TESTING'] = True
+    app.app.config['WTF_CSRF_CHECK_DEFAULT'] = False
+    app.app.config['WTF_CSRF_ENABLED'] = False
+    with app.app.test_client() as client:
+        with app.app.app_context():
+            s = app.app
+            c = app.app.app_context()
         yield client
 
 
