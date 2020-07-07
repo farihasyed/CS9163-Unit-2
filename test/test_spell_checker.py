@@ -79,8 +79,7 @@ def test_register_post(client):
     #invalid password - has other special characters
     response = register(client=client, username=usernames[2], password=passwords[4])
     assert b'Invalid password.' in response.data
-    message = escape('Only letters, numbers, and the following special characters: '
-                     '_, !, @, #, $, %, &, and * allowed.').encode()
+    message = escape('Only letters, numbers, and the following special characters: _, @, #, %, and * allowed.').encode()
     assert message in response.data
 
     #invalid password - too long

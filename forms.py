@@ -13,9 +13,9 @@ USERNAME_REGEX_VALIDATOR = Regexp(regex="^[a-z0-9*]+$",
                                               message="Only lowercase letters and numbers allowed.")
 USERNAME_LENGTH_VALIDATOR = Length(MIN_CREDENTIAL_LENGTH, MAX_CREDENTIAL_LENGTH,
                                    "Must be between 8 and 32 characters long.")
-PASSWORD_REGEX_VALIDATOR = Regexp(regex="^[a-zA-Z0-9_!@#$%&*]+$",
+PASSWORD_REGEX_VALIDATOR = Regexp(regex="^[a-zA-Z0-9_@#%*]+$",
                                                 message="Only letters, numbers, and the following special characters: "
-                                                        "_, !, @, #, $, %, &, and * allowed.")
+                                                        "_, @, #, %, and * allowed.")
 PASSWORD_LENGTH_VALIDATOR = Length(MIN_CREDENTIAL_LENGTH, MAX_CREDENTIAL_LENGTH,
                                    "Must be between 8 and 32 characters long.")
 PHONE_RANGE_VALIDATOR = NumberRange(MIN_PHONE_VALUE, MAX_PHONE_VALUE, "Only digits allowed and must be 10 digits long.")
