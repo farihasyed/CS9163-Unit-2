@@ -1,6 +1,7 @@
-pytest
-flask
+pytest~=5.4.3
+flask~=1.1.2
 tox-travis
-bleach
+bleach~=3.1.5
 flask-wtf
 tox
+WTForms~=2.3.1
