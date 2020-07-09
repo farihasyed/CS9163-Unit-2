@@ -15,9 +15,6 @@
         </form>
         <p/>Enter text to be spell checked.<p/>
         <form id="inputtext" action="/spell_check" method="POST">
-            {% if form.csrf_token.errors %}
-                You have submitted an invalid CSRF token.
-            {% endif %}
             {{ form.csrf_token }}
             
             {% if form.input.errors %}
