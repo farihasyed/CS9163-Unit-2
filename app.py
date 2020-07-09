@@ -3,15 +3,15 @@ from flask_wtf import CSRFProtect
 from forms import Registration, Login, SpellCheck
 from spell_check import login_required, spell_check_user_input, register_with_user_info, verify_login, cleanup
 from security import check_referrer, check_user, headers
+import os
 
 
 def create_app():
     app = Flask(__name__)
     app.config.update(
-        #SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE='Strict')
-    app.config.from_mapping(SECRET_KEY='dev')
+    app.config.from_mapping(SECRET_KEY=os.environ["SECRET_KEY"])
     csrf = CSRFProtect()
     csrf.init_app(app)
     return app, csrf
@@ -76,3 +76,5 @@ def logout():
         cleanup()
         return response
     return redirect(url_for('login'))
+
+
