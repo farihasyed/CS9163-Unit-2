@@ -184,7 +184,6 @@ def test_spell_check_post(client):
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert ('Input text: ' + input).encode() in response.data
-    assert b'The following 3 words were misspelled:' in response.data
     assert b'sogn' in response.data
     assert b'skyn' in response.data
     assert b'betta' in response.data
@@ -196,7 +195,6 @@ def test_spell_check_post(client):
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert b'Input text: &amp;lt;&amp;gt;!@#$%!@#$' in response.data
-    assert b'The following 1 words were misspelled:' in response.data
     assert b'lt;&amp;gt' in response.data
 
     #invalid input
