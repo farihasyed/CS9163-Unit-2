@@ -10,24 +10,27 @@
         <h1>User Registration</h1>
         <p/>
         <div id=success>
-        {% with success = get_flashed_messages(category_filter=["success"]) %}
-            {% if success %}
-                {%- for msg in success %}
-                    {{ msg }}
-                {% endfor -%}
-                Click <a href="{{ url_for('login') }}">here</a> to log in.
-            {% endif %}
-        {% endwith %}
-        {% with failure = get_flashed_messages(category_filter=["failure"]) %}
-            {% if failure %}
-                {%- for msg in failure %}
-                    {{ msg }}
-                {% endfor -%}
-            {% endif %}
-        {% endwith %}
+            {% with success = get_flashed_messages(category_filter=["success"]) %}
+                {% if success %}
+                    {%- for msg in success %}
+                        {{ msg }}
+                    {% endfor -%}
+                    Click <a href="{{ url_for('login') }}">here</a> to log in.
+                {% endif %}
+            {% endwith %}
+            {% with failure = get_flashed_messages(category_filter=["failure"]) %}
+                {% if failure %}
+                    {%- for msg in failure %}
+                        {{ msg }}
+                    {% endfor -%}
+                {% endif %}
+            {% endwith %}
         </div>
         
         <form name="register" id="register" action="/register" method="POST">
+            {% if form.csrf_token.errors %}
+                You have submitted an invalid CSRF token.
+            {% endif %}
             {{ form.csrf_token }}
             
             {% if form.username.errors %}

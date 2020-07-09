@@ -11,12 +11,13 @@
         <p/>
         You are logged in as {{ user }}.
         <form name="logout" id="logout" action="/logout" method="POST">
-        <div id="logout" type="submit">{{ form.logout }}</div>
+            <div id="logout" type="submit">{{ form.logout }}</div>
         </form>
-        <p/>
-        Enter text to be spell checked.
-        <p/>
+        <p/>Enter text to be spell checked.<p/>
         <form id="inputtext" action="/spell_check" method="POST">
+            {% if form.csrf_token.errors %}
+                You have submitted an invalid CSRF token.
+            {% endif %}
             {{ form.csrf_token }}
             
             {% if form.input.errors %}
@@ -27,8 +28,7 @@
             <div id="inputtext" name="inputtext"> {{ form.input(rows='10', cols='50') }} </div><p/>
             <div id="submit"> {{ form.submit }} </div>
         </form>
-        
-        <div class=flashes>
+
         {% with input = get_flashed_messages(category_filter=["input"]) %}
             {% if input %}
                 {%- for msg in input %}
@@ -43,7 +43,6 @@
                 {% endfor -%}
             {% endif %}
         {% endwith %}
-        </div>
             
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
