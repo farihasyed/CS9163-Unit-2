@@ -1,5 +1,5 @@
 import pytest
-from flask import Flask, escape
+from flask import escape
 import app
 
 usernames = ['farihasyed', 'nyu12345', 'uncchapelhill', 'dooksucks', 'unc!!', 'thisusernameislongerthan32characters', 'farihasyed2']
@@ -184,6 +184,7 @@ def test_spell_check_post(client):
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert ('Input text: ' + input).encode() in response.data
+    assert b'The following 3 words were misspelled:' in response.data
     assert b'sogn' in response.data
     assert b'skyn' in response.data
     assert b'betta' in response.data
@@ -191,11 +192,11 @@ def test_spell_check_post(client):
     #escaped input
     input = '<>!@#$%!@#$'
     response = spell_check(client, input)
-    print(response.data)
     assert b'Spell Check' in response.data
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
-    assert b'&amp;lt;&amp;gt;!@#$%!@#$' in response.data
+    assert b'Input text: &amp;lt;&amp;gt;!@#$%!@#$' in response.data
+    assert b'The following 1 words were misspelled:' in response.data
     assert b'lt;&amp;gt' in response.data
 
     #invalid input
@@ -204,7 +205,8 @@ def test_spell_check_post(client):
     assert b'Spell Check' in response.data
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
-    assert b'&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;gt;' in response.data
+    assert b'Input text: &amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;gt;' in response.data
+    assert b'Could not spell check invalid input.' in response.data
 
     #input too long
     input = "i'm trying to overflow the input buffer, which a hacker might do as part of a denial of service (DOS) attack, " \
