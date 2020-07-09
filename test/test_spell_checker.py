@@ -204,7 +204,6 @@ def test_spell_check_post(client):
     assert b'Enter text to be spell checked.' in response.data
     assert ('You are logged in as ' + usernames[0] + '.').encode() in response.data
     assert b'Input text: &amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;lt;&amp;gt;&amp;gt;' in response.data
-    assert b'Could not spell check invalid input.' in response.data
 
     #input too long
     input = "i'm trying to overflow the input buffer, which a hacker might do as part of a denial of service (DOS) attack, " \
