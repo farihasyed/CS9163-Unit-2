@@ -9,7 +9,7 @@ MIN_PHONE_VALUE = 1000000000
 MAX_PHONE_VALUE = 9999999999
 MAX_INPUT_LENGTH = 128
 
-USERNAME_REGEX_VALIDATOR = Regexp(regex="^[a-z0-9*]+$",
+USERNAME_REGEX_VALIDATOR = Regexp(regex="^[a-z0-9]+$",
                                               message="Only lowercase letters and numbers allowed.")
 USERNAME_LENGTH_VALIDATOR = Length(MIN_CREDENTIAL_LENGTH, MAX_CREDENTIAL_LENGTH,
                                    "Must be between 8 and 32 characters long.")
